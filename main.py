@@ -1,12 +1,8 @@
 from fastapi import FastAPI, File, UploadFile, Response, status
-from fastapi.responses import FileResponse
 import uuid
 from utils import validate_mime_type, upload_file_to_s3, get_file_from_s3, resize_image
 from fastapi.responses import HTMLResponse
-import io
 
-
-IMAGEDIR = "/home/matt/Desktop/Dlabs/Thumbnail_Generator/test/fastapi-images/"
 
 app = FastAPI()
 

@@ -1,7 +1,5 @@
-import logging
 import io
 import boto3
-from botocore.exceptions import ClientError
 from random import randint
 from PIL import Image
 
