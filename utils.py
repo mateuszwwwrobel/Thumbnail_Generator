@@ -44,7 +44,14 @@ def upload_file_to_s3(file: bytes, file_name: str, file_extension: str):
 
 # test
 def resize_image(image, width: int, height: int):
-    """"""
+    """Resize image with PIL library
+
+    :param image: binary representation of image
+    :param width: target image width
+    :param height: target image height
+    :return: ready image url
+    """
+
     image_body = image.get()['Body'].read()
     img = Image.open(io.BytesIO(image_body))
     img = img.resize((width, height), Image.ANTIALIAS)
@@ -58,7 +65,14 @@ def resize_image(image, width: int, height: int):
 
 # test
 def save_image(img, bucket, new_file_name, file_extension='png'):
-    """"""
+    """Save image to s3 with boto3.
+
+    :param img: binary representation of image
+    :param bucket: target bucket name
+    :param new_file_name: target file name
+    :param file_extension: file extension
+    :return: URL to resized file
+    """
     s3 = boto3.resource('s3')
     obj = s3.Object(
         bucket_name=bucket,
@@ -70,13 +84,20 @@ def save_image(img, bucket, new_file_name, file_extension='png'):
 
 # test
 def resized_image_url(resized_key):
-    """"""
+    """Create a url with to file with cloudfront and s3.
+
+    :param resized_key: path to file in s3 bucket
+    :return: URL to resized file
+    """
     return f'https://{CLOUDFRONT_URL}{resized_key}'
 
 
 # test
 def get_file_from_s3():
-    """"""
+    """Randomly choose a file from s3 bucket.
+
+    :return: random image from s3 source bucket.
+    """
     s3 = boto3.resource('s3')
     s3bucket = s3.Bucket(SOURCE_BUCKET)
 
