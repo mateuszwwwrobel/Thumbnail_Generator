@@ -29,9 +29,10 @@ async def create_upload_file(response: Response, file: UploadFile = File(...)):
     # opcja na plik z linku też?
 
     if validate_mime_type(file.content_type):
-        file.filename = f"{uuid.uuid4()}.{file.content_type.split('/')[1]}"
+        file_extension = file.content_type.split('/')[1]
+        file.filename = f"{uuid.uuid4()}.{file_extension}"
         contents = await file.read()
-        upload_file_to_s3(io.BytesIO(contents), 'thumb-images-bucket', file.filename)
+        upload_file_to_s3(contents, file.filename, file_extension)
         return {"filename": file.filename}
 
     response.status_code = status.HTTP_400_BAD_REQUEST
@@ -46,12 +47,10 @@ async def get_thumbnail(dimensions: str, response: Response):
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {"message": f"Your URL '/images/{dimensions}' is invalid. Please try again."}
 
-    img = get_file_from_s3('dasd', 'thumb-images-bucket')
+    img = get_file_from_s3()
     if img:
         resized_image_url = resize_image(img, width, height)
-
         return resized_image_url
-        # return FileResponse(resized_image_url)
 
     response.status_code = status.HTTP_404_NOT_FOUND
     return {"message": f"Please upload images in order to create a thumbnail."}

@@ -5,6 +5,10 @@ from botocore.exceptions import ClientError
 from random import randint
 from PIL import Image
 
+CLOUDFRONT_URL = 'di9ryp57fjv5f.cloudfront.net/'
+SOURCE_BUCKET = 'thumb-images-bucket'
+RESIZED_BUCKET = 'resized-thumbnails-bucket'
+
 
 # test
 def validate_mime_type(file_type: str):
@@ -20,7 +24,7 @@ def validate_mime_type(file_type: str):
 
 
 # test
-def upload_file_to_s3(file: io.BytesIO, bucket: str, file_name: str):
+def upload_file_to_s3(file: bytes, file_name: str, file_extension: str):
     """Upload a file to an S3 bucket
 
     :param file: File to upload(bytes)
@@ -29,22 +33,20 @@ def upload_file_to_s3(file: io.BytesIO, bucket: str, file_name: str):
     :return: True if file was uploaded, else False
     """
 
-    s3_client = boto3.client(
-        's3',
-        aws_access_key_id='AKIATXKH6RANVQV55XHU',
-        aws_secret_access_key='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',
-    )
-
+    img = Image.open(io.BytesIO(file))
+    buffer = io.BytesIO()
+    img.save(buffer, file_extension)
+    buffer.seek(0)
     try:
-        response = s3_client.upload_fileobj(file, bucket, file_name)
-    except ClientError as e:
-        logging.error(e)
+        save_image(buffer, SOURCE_BUCKET, file_name, file_extension)
+    except:
         return False
     return True
 
 
 # test
 def resize_image(image, width: int, height: int):
+    """"""
     image_body = image.get()['Body'].read()
     img = Image.open(io.BytesIO(image_body))
     img = img.resize((width, height), Image.ANTIALIAS)
@@ -52,49 +54,38 @@ def resize_image(image, width: int, height: int):
     img.save(buffer, "PNG")
     buffer.seek(0)
     new_file_name = f'{width}x{height}-{image.key}'
-    new_path = save_resized_image(buffer, new_file_name)
-    return new_path
-
-
-def save_resized_image(img, new_file_name):
-    s3 = boto3.resource('s3')
-    obj = s3.Object(
-        bucket_name='thumb-images-bucket',
-        key=f'resized_images/{new_file_name}',
-    )
-    obj.put(Body=img, ContentType='image/png')
-    return resized_image_url(f'resized_images/{new_file_name}', 'thumb-images-bucket', 'eu-west-2')
-
-
-def resized_image_url(resized_key, bucket, region):
-    return f'https://{bucket}.s3.{region}.amazonaws.com/{resized_key}'
+    img_url = save_image(buffer, RESIZED_BUCKET, f'resized_images/{new_file_name}')
+    return img_url
 
 
 # test
-def get_file_from_s3(filename, bucket_name: str):
+def save_image(img, bucket, new_file_name, file_extension='png'):
     """"""
-    s3_client = boto3.client(
-        's3',
-        aws_access_key_id='AKIATXKH6RANVQV55XHU',
-        aws_secret_access_key='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',
-    )
-
     s3 = boto3.resource('s3')
-    s3bucket = s3.Bucket(bucket_name)
+    obj = s3.Object(
+        bucket_name=bucket,
+        key=new_file_name,
+    )
+    obj.put(Body=img, ContentType=f'image/{file_extension}')
+    return resized_image_url(new_file_name)
 
-    count = count_files_in_s3(s3bucket)
 
+# test
+def resized_image_url(resized_key):
+    """"""
+    return f'https://{CLOUDFRONT_URL}{resized_key}'
+
+
+# test
+def get_file_from_s3():
+    """"""
+    s3 = boto3.resource('s3')
+    s3bucket = s3.Bucket(SOURCE_BUCKET)
+
+    count = len(list(s3bucket.objects.all()))
     if count != 0:
         random_int = randint(0, count-1)
         image = list(s3bucket.objects.all())[random_int]
         return image
     else:
         return None
-
-
-# test
-def count_files_in_s3(s3bucket):
-    total_count = 0
-    for key in s3bucket.objects.all():
-        total_count += 1
-    return total_count
