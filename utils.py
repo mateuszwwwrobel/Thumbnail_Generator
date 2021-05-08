@@ -1,11 +1,15 @@
 import io
+import os
 import boto3
 from random import randint
 from PIL import Image
 
-CLOUDFRONT_URL = 'di9ryp57fjv5f.cloudfront.net/'
-SOURCE_BUCKET = 'thumb-images-bucket'
-RESIZED_BUCKET = 'resized-thumbnails-bucket'
+
+CLOUDFRONT_URL = os.environ.get('CLOUDFRONT_URL')
+SOURCE_BUCKET = os.environ.get('SOURCE_BUCKET')
+RESIZED_BUCKET = os.environ.get('RESIZED_BUCKET')
+AWS_ACCESS_ID = os.environ.get('AWS_ACCESS_ID')
+AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY')
 
 
 # test
@@ -26,8 +30,8 @@ def upload_file_to_s3(file: bytes, file_name: str, file_extension: str):
     """Upload a file to an S3 bucket
 
     :param file: File to upload(bytes)
-    :param bucket: Bucket to upload to
     :param file_name: S3 object name. If not specified then file_name is used
+    :param file_extension: file extension
     :return: True if file was uploaded, else False
     """
 
@@ -73,7 +77,9 @@ def save_image(img, bucket, new_file_name, file_extension='png'):
     :param file_extension: file extension
     :return: URL to resized file
     """
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3',
+                        aws_access_key_id=AWS_ACCESS_ID,
+                        aws_secret_access_key=AWS_ACCESS_KEY)
     obj = s3.Object(
         bucket_name=bucket,
         key=new_file_name,
@@ -98,7 +104,9 @@ def get_file_from_s3():
 
     :return: random image from s3 source bucket.
     """
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3',
+                        aws_access_key_id=AWS_ACCESS_ID,
+                        aws_secret_access_key=AWS_ACCESS_KEY)
     s3bucket = s3.Bucket(SOURCE_BUCKET)
 
     count = len(list(s3bucket.objects.all()))
