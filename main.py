@@ -1,23 +1,19 @@
-from fastapi import FastAPI, File, UploadFile, Response, status
+from fastapi import FastAPI, File, UploadFile, Response, status, Request
 import uuid
 from utils import validate_mime_type, upload_file_to_s3, get_file_from_s3, resize_image
-from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/")
-async def main():
-    content = """
-<body>
-<form action="/images" enctype="multipart/form-data" method="post">
-<input name="files" type="file" multiple>
-<input type="submit">
-</form>
-</body>
-    """
-    return HTMLResponse(content=content)
+async def main(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/images/")
