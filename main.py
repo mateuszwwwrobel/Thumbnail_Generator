@@ -4,7 +4,6 @@ from utils import validate_mime_type, upload_file_to_s3, get_file_from_s3, resiz
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -17,18 +16,24 @@ async def main(request: Request):
 
 
 @app.post("/images/")
-async def create_upload_file(response: Response, file: UploadFile = File(...)):
-    # opcja na plik z linku też?
+async def create_upload_file(request: Request, response: Response, file: UploadFile = File(...)):
 
     if validate_mime_type(file.content_type):
         file_extension = file.content_type.split('/')[1]
         file.filename = f"{uuid.uuid4()}.{file_extension}"
         contents = await file.read()
         upload_file_to_s3(contents, file.filename, file_extension)
-        return {"filename": file.filename}
+        return templates.TemplateResponse("upload.html", {"request": request,
+                                                          "filename": file.filename,
+                                                          "message": "Image has been uploaded.",
+                                                          "status": "success"
+                                                          })
 
     response.status_code = status.HTTP_400_BAD_REQUEST
-    return {"message": f"Invalid file format."}
+    return templates.TemplateResponse("upload.html", {"request": request,
+                                                      "message": "Invalid file format. Please try again.",
+                                                      "status": "fail"
+                                                      })
 
 
 @app.get('/images/{dimensions}')
