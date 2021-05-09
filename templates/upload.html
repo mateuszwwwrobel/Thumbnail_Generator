@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="main-container">
+    <h1>Welcome to Thumbnail Generator</h1>
+    <div class="ui divider"></div>
+
+    {% if status == 'fail' %}
+    <i class="red-text exclamation triangle icon"></i>
+    <div class="ui divider"></div>
+    <div class="red-text">
+        <h3>{{message}}</h3>
+    </div>
+    {% else %}
+    <i class="green-text exclamation triangle icon"></i>
+    <div class="ui divider"></div>
+    <div class="green-text">
+        <h3>{{message}}</h3>
+    </div>
+    {% endif %}
+
+    <div class="ui divider"></div>
+    <div>
+        <a href="/"><button id="upload-image" class="ui button">Back to Homepage</button></a>
+    </div>
+</div>
+<div id="fileUpload"></div>
+
+{% endblock content %}

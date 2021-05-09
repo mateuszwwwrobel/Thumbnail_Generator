@@ -1,28 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
-    <link rel="icon" href="{{ url_for('static', path='/favicon.ico') }}" type="image/x-icon"/>
-    <title>Thumbnail Generator</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<div class="container">
-    <h1>Thumbnail Generator</h1>
+{% block content %}
 
-    <h4>Upload photo:</h4>
-    <form action="/images" method="POST" enctype="multipart/form-data">
-        <div>
-            <label id="select_photo">Select Photo</label>
-            <input type="file" name="uploaded_image" size="40">
-        </div>
-        <div>
-            <input type="submit" value="UPLOAD">
-        </div>
-    </form>
+<div class="main-container">
+    <h1>Welcome to Thumbnail Generator</h1>
+
+    <h4>Click a button below in order to upload an image of your choice to a database.</h4>
+    <div class="ui divider"></div>
+    <div>
+        <button id="upload-image" class="ui button">UPLOAD IMAGE</button>
+    </div>
 </div>
 
-</body>
-</html>
+<div class="ui modal">
+    <div class="header">Upload Image</div>
+    <div class="content">
+        <form action="/images" method="POST" enctype="multipart/form-data" name="fileinfo">
+            <div class="field">
+                <label id="select_photo">Select Photo:</label>
+                <input id="fileUpload" type="file" name="file" size="40">
+                <div class="ui divider"></div>
+            </div>
+            <div id="send-image">
+                <div id="message"></div>
+                <input class="ui positive approve icon button" type="submit" value="UPLOAD">
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui negative cancel button">Cancel</div>
+    </div>
+</div>
+
+<img class="ui fluid image" src="#" alt="thumbnail">
+
+
+{% endblock content %}
