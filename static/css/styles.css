@@ -1,0 +1,24 @@
+
+
+.main-container{
+    padding-top: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.red-text{
+    color: red;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+
+.green-text{
+    color: green;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
