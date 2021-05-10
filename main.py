@@ -1,13 +1,16 @@
 from fastapi import FastAPI, File, UploadFile, Response, status, Request
 import uuid
-from utils import validate_mime_type, upload_file_to_s3, get_file_from_s3, resize_image
+from utils import validate_mime_type, upload_file_to_s3, get_random_file_from_s3, resize_image
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from cache.cache import Cache
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
+cache = Cache()
 
 
 @app.get("/")
@@ -41,6 +44,12 @@ async def create_upload_file(request: Request, response: Response, file: UploadF
 
 @app.get('/images/{dimensions}')
 async def get_thumbnail(dimensions: str, response: Response):
+    cached_url = cache.check_key(dimensions, 60)
+    if cached_url:
+        return {
+            'img_url': cached_url,
+            "message": "Thumbnail has been created within last hour."}
+
     try:
         width, height = [int(dimension) for dimension in dimensions.split('x')]
     except ValueError:
@@ -50,9 +59,10 @@ async def get_thumbnail(dimensions: str, response: Response):
     if width <= 0 or height <= 0:
         return {"message": "Height and width must be greater then 0."}
 
-    img = get_file_from_s3()
+    img = get_random_file_from_s3()
     if img:
         resized_image_url = resize_image(img, width, height)
+        cache.add_key(dimensions, resized_image_url)
         return {'message': f"Thumbnail {dimensions} successfully created",
                 'img_url': resized_image_url}
 
