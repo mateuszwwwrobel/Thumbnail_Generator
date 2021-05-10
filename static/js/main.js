@@ -6,8 +6,7 @@ $(document).ready(function () {
 });
 
 
-
-// // Instructions for handling an '/images' endpoint.
+// // Instructions for handling an '/images/' post endpoint.
 document.querySelector('#fileUpload').addEventListener("submit", (event) => handleSubmit(), false);
 
 async function handleSubmit(event) {
@@ -27,3 +26,5 @@ async function handleSubmit(event) {
             console.error(error)
         })
 }
+
+

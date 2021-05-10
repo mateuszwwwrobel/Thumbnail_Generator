@@ -22,9 +22,34 @@
 
     <div class="ui divider"></div>
     <div>
-        <a href="/"><button id="upload-image" class="ui button">Back to Homepage</button></a>
+        <button id="upload-image" class="ui button">Upload another image</button>
+
+        <div class="ui divider"></div>
+        <a href="/">
+            <button class="ui button">Back to Homepage</button>
+        </a>
     </div>
+
+    <div class="ui modal">
+        <div class="header">Upload Image</div>
+        <div class="content">
+            <form action="/images/" method="POST" enctype="multipart/form-data" name="fileinfo">
+                <div class="field">
+                    <label id="select_photo">Select Photo:</label>
+                    <input id="fileUpload" type="file" name="file" size="40">
+                    <div class="ui divider"></div>
+                </div>
+                <div id="send-image">
+                    <div id="message"></div>
+                    <input class="ui positive approve icon button" type="submit" value="UPLOAD">
+                </div>
+            </form>
+        </div>
+        <div class="actions">
+            <div class="ui negative cancel button">Cancel</div>
+        </div>
+    </div>
+
 </div>
-<div id="fileUpload"></div>
 
 {% endblock content %}

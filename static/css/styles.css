@@ -1,15 +1,26 @@
 
+body {
+    background: linear-gradient(180deg,
+    #06396D 0%,
+    #0C3978 0.01%,
+    #303ABB 60.42%,
+    #4F3AF4 89.58%,
+    #8042FE 100%),
+    #06396D;
+}
 
 .main-container{
-    padding-top: 5vh;
+    color: white;
+    padding: 5vh 7vh 0 7vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
 }
 
 
 .red-text{
-    color: red;
+    color: #ff0000;
     display: flex;
     align-items: center;
     font-weight: bold;
@@ -17,7 +28,7 @@
 
 
 .green-text{
-    color: green;
+    color: #69ff00;
     display: flex;
     align-items: center;
     font-weight: bold;
