@@ -8,22 +8,28 @@
         Just enter the dimensions below and click the generate button.</h3>
     <div class="ui divider"></div>
 
-    <div class="ui inverted segment"><div class="ui inverted form">
-        <div class="header">Enter dimensions in pixels</div>
-        <form>
+    <div class="ui inverted segment">
+        <div class="ui inverted form">
+            <div class="header">Enter dimensions in pixels</div>
             <div class="inline field">
-                <label for="width">Width</label>
+                <label for="width">Width:</label>
                 <input id="width" name="width" type="number" placeholder="Width">
             </div>
             <div class="inline field">
-                <label for="height">Height</label>
+                <label for="height">Height:</label>
                 <input id="height" name="height" type="number" placeholder="Height">
             </div>
-            <input class="ui purple approve icon button" type="submit" value="GET THUMBNAIL">
-        </form>
-    </div></div>
+            <input id="get-thumbnail" class="ui purple approve icon button" type="submit" value="GET THUMBNAIL">
+        </div>
+    </div>
 
-    <div class="ui divider"></div>
+    <p id="message"></p>
+    <div id="thumbnail-container" class="main-container">
+        <img id="thumbnail-image" class="ui image" src="#" alt="thumbnail">
+        <div class="ui divider"></div>
+        <a id="thumbnail-download" target="_blank" href="#"><button class="ui purple approve icon button">Open in new tab.</button></a>
+    </div>
+
     <h4>Click a button below in order to upload an image of your choice to a database.</h4>
     <div>
         <button id="upload-image" class="ui button purple">UPLOAD IMAGE</button>
@@ -40,7 +46,6 @@
                 <div class="ui divider"></div>
             </div>
             <div id="send-image">
-                <div id="message"></div>
                 <input class="ui positive approve icon button" type="submit" value="UPLOAD">
             </div>
         </form>
@@ -49,10 +54,5 @@
         <div class="ui negative cancel button">Cancel</div>
     </div>
 </div>
-
-<div>
-    <img class="ui fluid image" src="#" alt="thumbnail">
-</div>
-
 
 {% endblock content %}

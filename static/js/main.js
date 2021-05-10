@@ -6,8 +6,9 @@ $(document).ready(function () {
 });
 
 
-// // Instructions for handling an '/images/' post endpoint.
-document.querySelector('#fileUpload').addEventListener("submit", (event) => handleSubmit(), false);
+// Handling an '/images/' post endpoint.
+document.querySelector('#fileUpload').addEventListener("submit",
+    (event) => handleSubmit(), false);
 
 async function handleSubmit(event) {
     let files = event.target.files
@@ -27,4 +28,52 @@ async function handleSubmit(event) {
         })
 }
 
+
+// Handling an '/images/{dimensions}' get endpoint.
+document.querySelector('#get-thumbnail').addEventListener("click",
+    (event) => getThumbnail(), false);
+
+
+async function getThumbnail(event) {
+    let width = $("#width").val()
+    let height = $("#height").val()
+    let url_param = width + 'x' + height
+
+    if (url_param === 'x'){
+        document.getElementById('message').innerHTML = "Please enter dimensions."
+            setTimeout(function () {
+                document.getElementById("message").innerHTML = "";
+            }, 4000);
+        return;
+    }
+
+    await fetch('/images/' + url_param, {
+        method: 'GET',
+    }).then(response => response.json())
+        .then(data => {
+            document.getElementById('thumbnail-image').src = data.img_url
+            document.getElementById('thumbnail-download').href = data.img_url
+            document.getElementById('message').innerHTML = data.message
+            setTimeout(function () {
+                document.getElementById("message").innerHTML = '';
+            }, 4000);
+
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+// Toggle create thumbnail
+
+$("#get-thumbnail").click(function(){
+    if ($("#width").val() === '' || $("#width").val() <= 0 ||
+        $("#height").val() === '' || $("#height").val() <= 0
+    ){
+    }
+    else{
+        $("#thumbnail-container").show();
+    }
+
+});
 
