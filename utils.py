@@ -99,7 +99,7 @@ def resized_image_url(resized_key):
 
 
 # test
-def get_file_from_s3():
+def get_random_file_from_s3():
     """Randomly choose a file from s3 bucket.
 
     :return: random image from s3 source bucket.

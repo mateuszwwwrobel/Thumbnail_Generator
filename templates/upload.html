@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="main-container">
+    <h1>Welcome to Thumbnail Generator</h1>
+    <div class="ui divider"></div>
+
+    {% if status == 'fail' %}
+    <i class="red-text exclamation triangle icon"></i>
+    <div class="ui divider"></div>
+    <div class="red-text">
+        <h3>{{message}}</h3>
+    </div>
+    {% else %}
+    <i class="green-text exclamation triangle icon"></i>
+    <div class="ui divider"></div>
+    <div class="green-text">
+        <h3>{{message}}</h3>
+    </div>
+    {% endif %}
+
+    <div class="ui divider"></div>
+    <div>
+        <button id="upload-image" class="ui purple button">Upload another image</button>
+
+        <div class="ui divider"></div>
+        <a href="/">
+            <button class="ui purple button">Back to Homepage</button>
+        </a>
+    </div>
+
+    <div class="ui modal">
+        <div class="header">Upload Image</div>
+        <div class="content">
+            <form action="/images/" method="POST" enctype="multipart/form-data" name="fileinfo">
+                <div class="field">
+                    <label id="select_photo">Select Photo:</label>
+                    <input id="fileUpload" type="file" name="file" size="40">
+                    <div class="ui divider"></div>
+                </div>
+                <div id="send-image">
+                    <div id="message"></div>
+                    <input class="ui positive approve icon button" type="submit" value="UPLOAD">
+                </div>
+            </form>
+        </div>
+        <div class="actions">
+            <div class="ui negative cancel button">Cancel</div>
+        </div>
+    </div>
+
+</div>
+<div id="get-thumbnail"></div>
+
+{% endblock content %}
