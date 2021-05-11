@@ -20,7 +20,7 @@ async def main(request: Request):
 
 
 @app.post("/images/")
-async def create_upload_file(request: Request, response: Response, file: UploadFile = File(...)):
+async def create_upload_file(request: Request, file: UploadFile = File(...)):
     if validate_mime_type(file.content_type):
         file_extension = file.content_type.split('/')[1]
         file.filename = f"{uuid.uuid4()}.{file_extension}"
@@ -35,7 +35,6 @@ async def create_upload_file(request: Request, response: Response, file: UploadF
                 "status": "success"
             })
 
-    response.status_code = status.HTTP_400_BAD_REQUEST
     return templates.TemplateResponse(
         "upload.html", {
             "request": request,
