@@ -1,10 +1,3 @@
-// Popup window for uploading images
-$(document).ready(function () {
-    $("#upload-image").click(function () {
-        $('.ui.modal').modal('show');
-    })
-});
-
 
 // Handling an '/images/' post endpoint.
 document.querySelector('#fileUpload').addEventListener("submit",

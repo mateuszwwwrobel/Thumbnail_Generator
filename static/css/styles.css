@@ -37,3 +37,25 @@ body {
 #thumbnail-container{
     display: none;
 }
+
+
+.form-div{
+    z-index: 9;
+    height: auto;
+    width: auto;
+    background-color: dimgrey;
+    padding: 15px 30px 15px 30px;
+    border-radius: 20px;
+}
+
+
+.blink {
+  animation: blinker 4s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+      opacity: 0.2;
+      color: blue;
+  }
+}

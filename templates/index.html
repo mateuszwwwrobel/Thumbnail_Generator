@@ -3,56 +3,46 @@
 {% block content %}
 
 <div class="main-container">
-    <h1>Welcome to Thumbnail Generator</h1>
-    <h3>Generate a random thumbnail of the dimensions you choose.
+    <h1 class="blink mb-4">Welcome to Thumbnail Generator</h1>
+    <h3 class="mb-5">Generate a random thumbnail of the dimensions you choose.
         Just enter the dimensions below and click the generate button.</h3>
-    <div class="ui divider"></div>
 
-    <div class="ui inverted segment">
-        <div class="ui inverted form">
-            <div class="header">Enter dimensions in pixels</div>
-            <div class="inline field">
-                <label for="width">Width:</label>
-                <input id="width" name="width" type="number" placeholder="Width">
-            </div>
-            <div class="inline field">
-                <label for="height">Height:</label>
-                <input id="height" name="height" type="number" placeholder="Height">
-            </div>
-            <input id="get-thumbnail" class="ui purple approve icon button" type="submit" value="GET THUMBNAIL">
+    <div class="form-div">
+        <div>Enter dimensions in pixels</div>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label col-form-label-sm" for="width">Width:</label>
+            <input class="form-control form-control-sm" id="width" name="width" type="number" placeholder="Width">
         </div>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label col-form-label-sm" for="height">Height:</label>
+            <input class="form-control form-control-sm" id="height" name="height" type="number" placeholder="Height">
+        </div>
+        <input id="get-thumbnail" class="mt-2 btn btn-lg btn-success" type="submit" value="GET THUMBNAIL">
     </div>
 
-    <p id="message"></p>
+    <p class="mt-4" id="message"></p>
     <div id="thumbnail-container" class="main-container">
-        <img id="thumbnail-image" class="ui image" src="https://www.mayflex.com/sites/default/files/no-image-box.png" alt="Thumbnail">
-        <div class="ui divider"></div>
-        <a id="thumbnail-download" target="_blank" href="#"><button class="ui purple approve icon button">Open in new tab.</button></a>
+        <img id="thumbnail-image" src="https://www.mayflex.com/sites/default/files/no-image-box.png"
+             alt="Thumbnail">
+        <div class="mb-4"></div>
+        <a id="thumbnail-download" target="_blank" href="#">
+            <button class="btn btn-lg btn-success">Open in new tab.</button>
+        </a>
     </div>
 
-    <h4>Click a button below in order to upload an image of your choice to a database.</h4>
-    <div>
-        <button id="upload-image" class="ui button purple">UPLOAD IMAGE</button>
-    </div>
-</div>
-
-<div class="ui modal">
-    <div class="header">Upload Image</div>
-    <div class="content">
+    <h4 class="my-4">Upload images to database using a form down below.</h4>
+    <div class="form-div">
         <form action="/images/" method="POST" enctype="multipart/form-data" name="fileinfo">
             <div class="field">
-                <label>Select Image:</label>
-                <input id="fileUpload" type="file" name="file" size="40">
-                <div class="ui divider"></div>
+                <label class="form-label">Select Image:</label>
+                <input class="form-control form-control-sm" id="fileUpload" type="file" name="file" size="40" required>
             </div>
             <div id="send-image">
-                <input class="ui positive approve icon button" type="submit" value="UPLOAD">
+                <input class="btn btn-lg btn-success" type="submit" value="UPLOAD">
             </div>
         </form>
     </div>
-    <div class="actions">
-        <div class="ui negative cancel button">Cancel</div>
-    </div>
 </div>
+
 
 {% endblock content %}
