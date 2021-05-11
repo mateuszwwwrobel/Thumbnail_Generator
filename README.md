@@ -37,6 +37,11 @@ See requirements.txt file.
 
 ### Running tests
 
+In main directory run command:
+```sh
+(<venv-name>)$ pytest
+```
+
 ## Acknowledgments
 
 For help with every trouble:
