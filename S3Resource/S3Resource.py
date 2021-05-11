@@ -27,7 +27,7 @@ class S3Resource:
             return None
 
     def save_image_to_bucket(self, image, bucket_name, new_file_name, file_extension='png'):
-
+        """Method for uploading file to s3."""
         obj = self.s3.Object(
             bucket_name=bucket_name,
             key=new_file_name,
