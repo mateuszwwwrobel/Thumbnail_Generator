@@ -1,10 +1,11 @@
-from fastapi import FastAPI, File, UploadFile, Response, status, Request
+import os
 import uuid
-from utils import validate_mime_type, upload_file_to_s3, get_random_file_from_s3, resize_image
+from fastapi import FastAPI, File, UploadFile, Response, status, Request
+from utils import validate_mime_type, upload_file_to_s3, resize_image
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from cache.cache import Cache
-
+from S3Resource.S3Resource import S3Resource
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -58,9 +59,11 @@ async def get_thumbnail(dimensions: str, response: Response):
         return {"message": "Your dimensions are invalid. Please try again."}
 
     if width <= 0 or height <= 0:
+        response.status_code = status.HTTP_400_BAD_REQUEST
         return {"message": "Height and width must be greater then 0."}
 
-    img = get_random_file_from_s3()
+    s3_resource = S3Resource()
+    img = s3_resource.get_random_file(os.getenv('SOURCE_BUCKET'))
     if img:
         resized_image_url = resize_image(img, width, height)
         cache.add_key(dimensions, resized_image_url)
