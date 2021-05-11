@@ -51,8 +51,10 @@ async function getThumbnail(event) {
         method: 'GET',
     }).then(response => response.json())
         .then(data => {
-            document.getElementById('thumbnail-image').src = data.img_url
-            document.getElementById('thumbnail-download').href = data.img_url
+            if (data.img_url){
+                document.getElementById('thumbnail-image').src = data.img_url
+                document.getElementById('thumbnail-download').href = data.img_url
+            }
             document.getElementById('message').innerHTML = data.message
             setTimeout(function () {
                 document.getElementById("message").innerHTML = '';
