@@ -2,6 +2,8 @@ import io
 import os
 import boto3
 from random import randint
+
+import botocore
 from PIL import Image
 
 
@@ -17,7 +19,7 @@ def validate_mime_type(file_type: str):
     """Validation of the uploaded file MIME type.
 
     :param file_type: file content type
-    :return: True if file content/type == 'image'
+    :return: True if file content/type == 'image/...'
     """
 
     if file_type.split('/')[0] == 'image':
@@ -32,17 +34,20 @@ def upload_file_to_s3(file: bytes, file_name: str, file_extension: str):
     :param file: File to upload(bytes)
     :param file_name: S3 object name. If not specified then file_name is used
     :param file_extension: file extension
-    :return: True if file was uploaded, else False
+    :return True if no errors occur
     """
 
     img = Image.open(io.BytesIO(file))
     buffer = io.BytesIO()
     img.save(buffer, file_extension)
     buffer.seek(0)
+
     try:
         save_image(buffer, SOURCE_BUCKET, file_name, file_extension)
-    except:
-        return False
+    except botocore.exceptions.ClientError as error:
+        raise error
+    except botocore.exceptions.ParamValidationError as error:
+        raise error
     return True
 
 

@@ -12,8 +12,8 @@ class Cache:
         :param key: dictionary key,
         :param value: dictionary value,
         """
-        data = self.memory[key] = [datetime.datetime.now(), value]
-        return data
+        self.memory[key] = [datetime.datetime.now(), value]
+        return self.memory
 
     def check_key(self, key, minutes):
         """method for checking dictionary keys according to creation time and checking time.

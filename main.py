@@ -24,6 +24,7 @@ async def create_upload_file(request: Request, response: Response, file: UploadF
         file_extension = file.content_type.split('/')[1]
         file.filename = f"{uuid.uuid4()}.{file_extension}"
         contents = await file.read()
+
         upload_file_to_s3(contents, file.filename, file_extension)
         return templates.TemplateResponse(
             "upload.html", {
