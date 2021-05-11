@@ -1,7 +1,8 @@
 # Thumbnail_Generator
 FastAPI based thumbnail generator.
 
-#### Live on AWS - [Click here](http://18.168.150.167/)
+#### Live on AWS - [Click here for Semantic UI version](http://18.168.150.167/)
+#### Live on AWS - [Click here for Bootstrap version](http://18.168.197.105/)
 
 ## Setup
 
