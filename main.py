@@ -4,14 +4,14 @@ from fastapi import FastAPI, File, UploadFile, Response, status, Request
 from utils import validate_mime_type, upload_file_to_s3, resize_image
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from cache.cache import Cache
+from cache.cache import CacheMemory
 from S3Resource.S3Resource import S3Resource
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
-cache = Cache()
+cache = CacheMemory()
 
 
 @app.get("/")
@@ -45,7 +45,7 @@ async def create_upload_file(request: Request, file: UploadFile = File(...)):
 
 @app.get('/images/{dimensions}')
 async def get_thumbnail(dimensions: str, response: Response):
-    cached_url = cache.check_key(dimensions, 60)
+    cached_url = cache.check_cache(dimensions, 1)
     if cached_url:
         return {
             'img_url': cached_url,
@@ -65,7 +65,7 @@ async def get_thumbnail(dimensions: str, response: Response):
     img = s3_resource.get_random_file(os.getenv('SOURCE_BUCKET'))
     if img:
         resized_image_url = resize_image(img, width, height)
-        cache.add_key(dimensions, resized_image_url)
+        cache.add_cache(dimensions, resized_image_url)
         return {'message': f"Thumbnail {dimensions} successfully created",
                 'img_url': resized_image_url}
 
