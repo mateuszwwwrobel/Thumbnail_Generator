@@ -29,5 +29,14 @@ class Cache:
             if time_difference < datetime.timedelta(minutes=minutes):
                 img_url = self.memory[key][1]
                 return img_url
-            else:
-                return
+
+
+if __name__ == '__main__':
+
+    c = Cache()
+
+    c.add_key('100x100', 'link_1')
+    c.add_key('200x200', 'link_2')
+    c.add_key('300x300', 'link_3')
+
+    print(c.memory)
