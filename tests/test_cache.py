@@ -16,7 +16,7 @@ def test_check_key_when_created_not_within_last_hour(cache_not_within_hour):
     assert cache_not_within_hour.check_cache('100x100', 60) is None
 
 
-def test_delete_other_cache_when_checking_other(cache_not_within_hour):
+def test_delete_redundant_cache_when_checking_other(cache_not_within_hour):
     cache_not_within_hour.add_cache('200x200', 'test-url')
     cache_not_within_hour.check_cache('200x200', 60)
     assert len(cache_not_within_hour.memory) == 1

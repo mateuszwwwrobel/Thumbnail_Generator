@@ -45,7 +45,7 @@ async def create_upload_file(request: Request, file: UploadFile = File(...)):
 
 @app.get('/images/{dimensions}')
 async def get_thumbnail(dimensions: str, response: Response):
-    cached_url = cache.check_cache(dimensions, 1)
+    cached_url = cache.check_cache(dimensions, 60)
     if cached_url:
         return {
             'img_url': cached_url,

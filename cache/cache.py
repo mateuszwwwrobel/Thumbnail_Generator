@@ -11,7 +11,6 @@ class Cache:
 
 class CacheMemory:
     """CacheMemory class with two method for adding and checking items."""
-
     def __init__(self, memory=None):
         if memory is None:
             self.memory = []
@@ -32,14 +31,15 @@ class CacheMemory:
         :param dimensions: dimensions which is being checked
         :param minutes: time for which data is to be cached in minutes.
         """
+        search_cache = None
         index = 0
         for cache in self.memory:
             time_difference = dt.datetime.now() - cache.time_cached
-            if cache.dimensions == dimensions:
-                if time_difference < dt.timedelta(minutes=minutes):
-                    cache.time_cached = dt.datetime.now()
-                    return cache.url
+            if time_difference > dt.timedelta(minutes=minutes):
+                del self.memory[index]
             else:
-                if time_difference > dt.timedelta(minutes=minutes):
-                    del self.memory[index]
+                if cache.dimensions == dimensions:
+                    cache.time_cached = dt.datetime.now()
+                    search_cache = cache.url
             index += 1
+        return search_cache
