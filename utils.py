@@ -1,12 +1,14 @@
 import io
 import os
+from typing import Optional
+
 import botocore
 
 from PIL import Image
 from S3Resource.S3Resource import S3Resource
 
 
-def validate_mime_type(file_type: str):
+def validate_mime_type(file_type: str) -> bool:
     """Validation of the uploaded file MIME type.
 
     :param file_type: file content type
@@ -18,7 +20,7 @@ def validate_mime_type(file_type: str):
     return False
 
 
-def upload_file_to_s3(file: bytes, file_name: str, file_extension: str):
+def upload_file_to_s3(file: bytes, file_name: str, file_extension: str) -> Optional[bool]:
     """Upload a file to an S3 bucket
 
     :param file: File to upload(bytes)
@@ -45,7 +47,7 @@ def upload_file_to_s3(file: bytes, file_name: str, file_extension: str):
     return True
 
 
-def resize_image(image, width: int, height: int):
+def resize_image(image, width: int, height: int) -> str:
     """Resize image with PIL library
 
     :param image: binary representation of image
