@@ -1,5 +1,6 @@
 import datetime as dt
 from dataclasses import dataclass
+from typing import List, Optional
 
 
 @dataclass
@@ -17,7 +18,7 @@ class CacheMemory:
         else:
             self.memory = memory
 
-    def add_cache(self, dimensions, img_url):
+    def add_cache(self, dimensions: str, img_url: str) -> List[Cache]:
         """Method for adding item to dictionary.
         :param dimensions: dimensions of image
         :param img_url: image url
@@ -26,12 +27,12 @@ class CacheMemory:
         self.memory.append(cache)
         return self.memory
 
-    def check_cache(self, dimensions, minutes):
+    def check_cache(self, dimensions: str, minutes: int) -> Optional[str]:
         """Method for checking dictionary keys according to creation time and checking time.
         :param dimensions: dimensions which is being checked
         :param minutes: time for which data is to be cached in minutes.
         """
-        search_cache = None
+        search_cache_url = None
         index = 0
         for cache in self.memory:
             time_difference = dt.datetime.now() - cache.time_cached
@@ -40,6 +41,6 @@ class CacheMemory:
             else:
                 if cache.dimensions == dimensions:
                     cache.time_cached = dt.datetime.now()
-                    search_cache = cache.url
+                    search_cache_url = cache.url
             index += 1
-        return search_cache
+        return search_cache_url
