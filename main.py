@@ -4,14 +4,12 @@ from fastapi import FastAPI, File, UploadFile, Response, status, Request
 from utils import validate_mime_type, upload_file_to_s3, resize_image
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from cache.cache import CacheMemory
 from S3Resource.S3Resource import S3Resource
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
-cache = CacheMemory()
 
 
 @app.get("/")

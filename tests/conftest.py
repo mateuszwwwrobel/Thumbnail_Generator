@@ -1,13 +1,11 @@
 import os
 import pytest
-import datetime
 import boto3
 
 from fastapi.testclient import TestClient
 
 from S3Resource.S3Resource import S3Resource
 from main import app
-from cache.cache import CacheMemory
 from moto import mock_s3
 
 
@@ -61,30 +59,3 @@ def bucket_name():
 def s3_test(s3_client, bucket_name):
     s3_client.create_bucket(Bucket=bucket_name)
     yield
-
-
-# Cache class fixtures
-@pytest.fixture()
-def empty_cache():
-    """Return an empty Cache instance."""
-    return CacheMemory()
-
-
-@pytest.fixture()
-def cache_within_hour():
-    """Return a Cache instance with a cached data created within last hour."""
-    time_30_minutes_ago = datetime.datetime.now() - datetime.timedelta(minutes=30)
-    cache = CacheMemory()
-    cache.add_cache('100x100', 'test_file_url')
-    cache.memory[0].time_cached = time_30_minutes_ago
-    return cache
-
-
-@pytest.fixture()
-def cache_not_within_hour():
-    """Return a Cache instance with a cached data created more then hour ago."""
-    time_90_minutes_ago = datetime.datetime.now() - datetime.timedelta(minutes=90)
-    cache = CacheMemory()
-    cache.add_cache('100x100', 'test_file_url')
-    cache.memory[0].time_cached = time_90_minutes_ago
-    return cache
