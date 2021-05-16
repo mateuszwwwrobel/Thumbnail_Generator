@@ -1,8 +1,3 @@
-import os
-from io import StringIO
-
-from starlette.responses import FileResponse
-
 
 # endpoint: '/'
 def test_homepage_route(test_app):

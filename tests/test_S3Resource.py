@@ -1,4 +1,3 @@
-import pytest
 from S3Resource.S3Resource import S3Resource, resized_image_url
 
 
