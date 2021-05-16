@@ -44,8 +44,8 @@ async def create_upload_file(request: Request, file: UploadFile = File(...)):
 
 
 @app.get('/images/{dimensions}')
-async def get_thumbnail(dimensions: str, response: Response):
-    cached_url = cache.check_cache(dimensions, 60)
+async def get_thumbnail(dimensions: str, response: Response, request: Request):
+    cached_url = request.cookies.get(dimensions)
     if cached_url:
         return {
             'img_url': cached_url,
@@ -65,7 +65,8 @@ async def get_thumbnail(dimensions: str, response: Response):
     img = s3_resource.get_random_file(os.getenv('SOURCE_BUCKET'))
     if img:
         resized_image_url = resize_image(img, width, height)
-        cache.add_cache(dimensions, resized_image_url)
+        response.set_cookie(key=dimensions, value=resized_image_url, max_age=3600)
+
         return {'message': f"Thumbnail {dimensions} successfully created",
                 'img_url': resized_image_url}
 
